@@ -1,6 +1,22 @@
 export type CardId = 'angela' | 'marlei';
 
-export type HistoryStatus = 'Disponível' | 'Em uso' | 'Devolvido';
+export type UserRole =
+  | 'MASTER'
+  | 'ADMIN'
+  | 'USER';
+
+export interface User {
+  id: number;
+  nome: string;
+  usuario: string;
+  perfil: UserRole;
+  ativo: boolean;
+}
+
+export type HistoryStatus =
+  | 'Disponível'
+  | 'Em uso'
+  | 'Devolvido';
 
 export interface CardUsage {
   id: string;
@@ -70,8 +86,16 @@ export interface CardInfo {
 }
 
 export const CARDS: Cards = {
-  angela: { id: 'angela', responsavel: 'Ângela', conta: '124802273' },
-  marlei: { id: 'marlei', responsavel: 'Marlei', conta: '127616191' },
+  angela: {
+    id: 'angela',
+    responsavel: 'Ângela',
+    conta: '124802273',
+  },
+  marlei: {
+    id: 'marlei',
+    responsavel: 'Marlei',
+    conta: '127616191',
+  },
 };
 
 export type Page =
@@ -80,4 +104,5 @@ export type Page =
   | 'card-marlei'
   | 'extrato-angela'
   | 'extrato-marlei'
-  | 'relatorios';
+  | 'relatorios'
+  | 'usuarios';

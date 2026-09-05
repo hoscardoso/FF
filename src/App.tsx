@@ -5,10 +5,12 @@ import { AppProvider, useApp } from '@/context/AppContext';
 import { useAuth } from '@/context/AuthContext';
 
 import { Sidebar } from '@/components/Sidebar';
+
 import { Dashboard } from '@/pages/Dashboard';
 import { CardControl } from '@/pages/CardControl';
 import { Statement } from '@/pages/Statement';
 import { Reports } from '@/pages/Reports';
+import { Users } from '@/pages/Users';
 import { Login } from '@/pages/Login';
 
 import { AlertBanner, useAlerts } from '@/components/Alerts';
@@ -44,6 +46,9 @@ function AppContent() {
       case 'relatorios':
         return <Reports />;
 
+      case 'usuarios':
+        return <Users />;
+
       default:
         return <Dashboard />;
     }
@@ -57,6 +62,7 @@ function AppContent() {
       'extrato-angela': 'Extrato Ângela',
       'extrato-marlei': 'Extrato Marlei',
       relatorios: 'Relatórios',
+      usuarios: 'Usuários',
     };
 
     return titles[page];
