@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+
 const authRoutes = require('./routes/auth');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 
@@ -10,6 +12,10 @@ app.use(express.json());
 console.log('Carregando authRoutes...');
 app.use('/api/auth', authRoutes);
 console.log('authRoutes carregada');
+
+console.log('Carregando usersRoutes...');
+app.use('/api/users', usersRoutes);
+console.log('usersRoutes carregada');
 
 app.get('/api/health', (req, res) => {
   res.json({

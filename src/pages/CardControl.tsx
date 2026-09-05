@@ -10,6 +10,7 @@ import {
   CalendarOff,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { useAuth } from '@/context/AuthContext';
 import type { CardId, CardUsage } from '@/types';
 import { CARDS } from '@/types';
 import {
@@ -40,6 +41,11 @@ const emptyForm = {
 export function CardControl({ cardId }: CardControlProps) {
   const { history, addHistory, updateHistory, deleteHistory } = useApp();
   const card = CARDS[cardId];
+  const { user } = useAuth();
+
+const podeEditar =
+  user?.perfil === 'MASTER' ||
+  user?.perfil === 'ADMIN';
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -242,10 +248,12 @@ export function CardControl({ cardId }: CardControlProps) {
             Conta {card.conta} · Controle de utilização
           </p>
         </div>
-        <button onClick={openNew} className="btn-primary">
-          <Plus className="w-4 h-4" />
-          Nova Retirada
-        </button>
+        {podeEditar && (
+  <button onClick={openNew} className="btn-primary">
+    <Plus className="w-4 h-4" />
+    Nova Retirada
+  </button>
+)}
       </div>
 
       {/* Info Cards */}
@@ -285,13 +293,15 @@ export function CardControl({ cardId }: CardControlProps) {
                 {currentUsage.finalidade}
               </p>
             </div>
-            <button
-              onClick={() => registerReturn(currentUsage)}
-              className="btn-success !py-1.5"
-            >
-              <RotateCcw className="w-4 h-4" />
-              Registrar Devolução
-            </button>
+            {podeEditar && (
+  <button
+    onClick={() => registerReturn(currentUsage)}
+    className="btn-success !py-1.5"
+  >
+    <RotateCcw className="w-4 h-4" />
+    Registrar Devolução
+  </button>
+)}
           </div>
         </div>
       )}
@@ -308,8 +318,17 @@ export function CardControl({ cardId }: CardControlProps) {
           rowKey={(h) => h.id}
           searchFields={(h) => `${h.quemRetirou} ${h.finalidade} ${h.observacao}`}
           searchPlaceholder="Pesquisar por nome ou finalidade..."
-          onEdit={openEdit}
-          onDelete={handleDelete}
+          onEdit={(item: CardUsage) => {
+  if (podeEditar) {
+    openEdit(item);
+  }
+}}
+
+onDelete={(item: CardUsage) => {
+  if (podeEditar) {
+    handleDelete(item);
+  }
+}}
           exportFilename={`historico-${card.responsavel.toLowerCase()}`}
           exportTitle={`Histórico de Utilização — ${card.responsavel}`}
           filters={

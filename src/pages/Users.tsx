@@ -1,36 +1,73 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { User, UserRole } from '@/types';
 
 export function Users() {
-  const [usuarios] = useState([
-    {
-      id: 1,
-      nome: 'Oscar Cardoso',
-      usuario: 'oscardoso',
-      perfil: 'MASTER',
-      ativo: true,
-    },
-    {
-      id: 2,
-      nome: 'Tamara Cardoso',
-      usuario: 'tsales',
-      perfil: 'ADMIN',
-      ativo: true,
-    },
-    {
-      id: 3,
-      nome: 'Wandrecreia Botelho',
-      usuario: 'secretariace',
-      perfil: 'USER',
-      ativo: true,
-    },
-    {
-      id: 4,
-      nome: 'Bp. Fernando Souza',
-      usuario: 'hfsouza',
-      perfil: 'USER',
-      ativo: true,
-    },
-  ]);
+  const [usuarios, setUsuarios] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [nome, setNome] = useState('');
+  const [usuario, setUsuario] = useState('');
+  const [senha, setSenha] = useState('');
+  const [perfil, setPerfil] =
+    useState<UserRole>('USER');
+
+  useEffect(() => {
+    carregarUsuarios();
+  }, []);
+
+  async function carregarUsuarios() {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/api/users'
+      );
+
+      const data = await response.json();
+
+      setUsuarios(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function criarUsuario() {
+    try {
+      const response = await fetch(
+        'http://localhost:3001/api/users',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json',
+          },
+          body: JSON.stringify({
+            nome,
+            usuario,
+            senha,
+            perfil,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.sucesso) {
+        setModalOpen(false);
+
+        setNome('');
+        setUsuario('');
+        setSenha('');
+        setPerfil('USER');
+
+        carregarUsuarios();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -42,90 +79,188 @@ export function Users() {
           </h1>
 
           <p className="text-slate-500">
-            Administração de usuários do sistema
+            Administração de usuários
           </p>
         </div>
 
-        <button className="btn-primary">
+        <button
+          className="btn-primary"
+          onClick={() =>
+            setModalOpen(true)
+          }
+        >
           Novo Usuário
         </button>
       </div>
 
       <div className="card-base p-6 overflow-x-auto">
-        <table className="w-full">
 
-          <thead>
-            <tr className="border-b">
-              <th className="text-left p-3">
-                Nome
-              </th>
+        {loading ? (
+          <p>
+            Carregando usuários...
+          </p>
+        ) : (
+          <table className="w-full">
 
-              <th className="text-left p-3">
-                Usuário
-              </th>
+            <thead>
+              <tr className="border-b">
+                <th className="text-left p-3">
+                  Nome
+                </th>
 
-              <th className="text-left p-3">
-                Perfil
-              </th>
+                <th className="text-left p-3">
+                  Usuário
+                </th>
 
-              <th className="text-left p-3">
-                Status
-              </th>
+                <th className="text-left p-3">
+                  Perfil
+                </th>
 
-              <th className="text-left p-3">
-                Ações
-              </th>
-            </tr>
-          </thead>
+                <th className="text-left p-3">
+                  Status
+                </th>
 
-          <tbody>
-            {usuarios.map((usuario) => (
-              <tr
-                key={usuario.id}
-                className="border-b"
-              >
-                <td className="p-3">
-                  {usuario.nome}
-                </td>
-
-                <td className="p-3">
-                  {usuario.usuario}
-                </td>
-
-                <td className="p-3">
-                  {usuario.perfil}
-                </td>
-
-                <td className="p-3">
-                  {usuario.ativo
-                    ? 'Ativo'
-                    : 'Bloqueado'}
-                </td>
-
-                <td className="p-3">
-                  <div className="flex gap-2">
-
-                    <button className="btn-secondary">
-                      Editar
-                    </button>
-
-                    <button className="btn-secondary">
-                      Senha
-                    </button>
-
-                    <button className="btn-danger">
-                      Bloquear
-                    </button>
-
-                  </div>
-                </td>
+                <th className="text-left p-3">
+                  Ações
+                </th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
 
-        </table>
+            <tbody>
+              {usuarios.map((u) => (
+                <tr
+                  key={u.id}
+                  className="border-b"
+                >
+                  <td className="p-3">
+                    {u.nome}
+                  </td>
+
+                  <td className="p-3">
+                    {u.usuario}
+                  </td>
+
+                  <td className="p-3">
+                    {u.perfil}
+                  </td>
+
+                  <td className="p-3">
+                    {u.ativo
+                      ? 'Ativo'
+                      : 'Bloqueado'}
+                  </td>
+
+                  <td className="p-3">
+                    <div className="flex gap-2">
+                      <button className="btn-secondary">
+                        Editar
+                      </button>
+
+                      <button className="btn-secondary">
+                        Senha
+                      </button>
+
+                      <button className="btn-danger">
+                        Bloquear
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        )}
       </div>
 
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+
+            <h2 className="text-xl font-bold mb-4">
+              Novo Usuário
+            </h2>
+
+            <div className="space-y-3">
+
+              <input
+                className="input-base"
+                placeholder="Nome"
+                value={nome}
+                onChange={(e) =>
+                  setNome(e.target.value)
+                }
+              />
+
+              <input
+                className="input-base"
+                placeholder="Usuário"
+                value={usuario}
+                onChange={(e) =>
+                  setUsuario(
+                    e.target.value
+                  )
+                }
+              />
+
+              <input
+                type="password"
+                className="input-base"
+                placeholder="Senha"
+                value={senha}
+                onChange={(e) =>
+                  setSenha(e.target.value)
+                }
+              />
+
+              <select
+                className="input-base"
+                value={perfil}
+                onChange={(e) =>
+                  setPerfil(
+                    e.target
+                      .value as UserRole
+                  )
+                }
+              >
+                <option value="MASTER">
+                  MASTER
+                </option>
+
+                <option value="ADMIN">
+                  ADMIN
+                </option>
+
+                <option value="USER">
+                  USER
+                </option>
+              </select>
+
+            </div>
+
+            <div className="flex justify-end gap-2 mt-6">
+
+              <button
+                className="btn-secondary"
+                onClick={() =>
+                  setModalOpen(false)
+                }
+              >
+                Cancelar
+              </button>
+
+              <button
+                className="btn-primary"
+                onClick={criarUsuario}
+              >
+                Salvar
+              </button>
+
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

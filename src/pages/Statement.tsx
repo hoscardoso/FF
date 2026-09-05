@@ -9,6 +9,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
+import { useAuth } from '@/context/AuthContext';
 import type { CardId, Purchase, Category, ConferenceStatus } from '@/types';
 import { CARDS, CATEGORIES, CONFERENCE_STATUSES } from '@/types';
 import {
@@ -43,6 +44,13 @@ export function Statement({ cardId }: StatementProps) {
   const { purchases, addPurchase, addPurchases, updatePurchase, deletePurchase } =
     useApp();
   const card = CARDS[cardId];
+  const { user } = useAuth();
+
+const podeEditar =
+  user?.perfil === 'MASTER' ||
+  user?.perfil === 'ADMIN';
+  
+  
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -267,23 +275,32 @@ export function Statement({ cardId }: StatementProps) {
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv,.xlsx,.xls,.pdf"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="btn-secondary"
-          >
-            <Upload className="w-4 h-4" />
-            Importar
-          </button>
-          <button onClick={openNew} className="btn-primary">
-            <Plus className="w-4 h-4" />
-            Nova Compra
-          </button>
+  ref={fileInputRef}
+  type="file"
+  accept=".csv,.xlsx,.xls,.pdf"
+  onChange={handleFileUpload}
+  className="hidden"
+/>
+
+{podeEditar && (
+  <>
+    <button
+      onClick={() => fileInputRef.current?.click()}
+      className="btn-secondary"
+    >
+      <Upload className="w-4 h-4" />
+      Importar
+    </button>
+
+    <button
+      onClick={openNew}
+      className="btn-primary"
+    >
+      <Plus className="w-4 h-4" />
+      Nova Compra
+    </button>
+  </>
+)}
         </div>
       </div>
 

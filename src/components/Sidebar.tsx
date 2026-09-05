@@ -9,6 +9,7 @@ import {
 
 import type { Page, CardId } from '@/types';
 import { CARDS } from '@/types';
+import { useAuth } from '@/context/AuthContext';
 
 interface SidebarProps {
   current: Page;
@@ -23,6 +24,8 @@ export function Sidebar({
   open,
   onClose,
 }: SidebarProps) {
+  const { user } = useAuth();
+
   const items: {
     id: Page;
     label: string;
@@ -69,11 +72,15 @@ export function Sidebar({
       icon: BarChart3,
     },
 
-    {
-      id: 'usuarios',
-      label: 'Usuários',
-      icon: Users,
-    },
+    ...(user?.perfil === 'MASTER'
+      ? [
+          {
+            id: 'usuarios' as Page,
+            label: 'Usuários',
+            icon: Users,
+          },
+        ]
+      : []),
   ];
 
   return (
