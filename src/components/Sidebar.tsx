@@ -22,7 +22,7 @@ export function Sidebar({ current, onNavigate, open, onClose }: SidebarProps) {
     sublabel?: string;
     icon: typeof LayoutDashboard;
   }[] = [
-    { id: 'inicio', label: 'Início', icon: LayoutDashboard },
+    { id: 'inicio', label: 'Dashboard', icon: LayoutDashboard },
     {
       id: 'card-angela',
       label: CARDS.angela.responsavel,
@@ -66,16 +66,17 @@ export function Sidebar({ current, onNavigate, open, onClose }: SidebarProps) {
           ${open ? 'translate-x-0' : '-translate-x-full'}`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200">
+        <div className="h-2 bg-gradient-to-r from-blue-500 via-violet-600 to-fuchsia-600"></div>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-200 bg-white">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-800 rounded-lg flex items-center justify-center shadow-md">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 via-violet-600 to-fuchsia-600 rounded-xl flex items-center justify-center shadow-md">
               <CreditCard className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-slate-800 leading-tight">
-                Cartões
+              <h1 className="text-sm font-bold text-violet-700 leading-tight">
+                Fundo Fixo CE
               </h1>
-              <p className="text-xs text-slate-500">Corporativos</p>
+              <p className="text-xs text-violet-500">Prestação de Contas</p>
             </div>
           </div>
           <button
@@ -121,9 +122,9 @@ export function Sidebar({ current, onNavigate, open, onClose }: SidebarProps) {
         {/* Footer */}
         <div className="px-6 py-4 border-t border-slate-200">
           <p className="text-xs text-slate-400">
-            Sistema de Controle
+            Fundo Fixo CE
           </p>
-          <p className="text-xs text-slate-400">v1.0 · 2026</p>
+          <p className="text-xs text-slate-400">Prestação de Contas Corporativas</p>
         </div>
       </aside>
     </>

@@ -8,6 +8,8 @@ import { Statement } from '@/pages/Statement';
 import { Reports } from '@/pages/Reports';
 import { AlertBanner, useAlerts } from '@/components/Alerts';
 import type { Page } from '@/types';
+import { Login } from '@/pages/Login';
+import { useAuth } from '@/context/AuthContext';
 
 function AppContent() {
   const [page, setPage] = useState<Page>('inicio');
@@ -99,9 +101,15 @@ function AppContent() {
 }
 
 export default function App() {
+  const { user } = useAuth();
+
   return (
     <AppProvider>
-      <AppContent />
+      {user ? (
+        <AppContent />
+      ) : (
+        <Login />
+      )}
     </AppProvider>
   );
 }
