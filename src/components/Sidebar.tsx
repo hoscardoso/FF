@@ -79,6 +79,21 @@ export function Sidebar({
             label: 'Usuários',
             icon: Users,
           },
+          {
+            id: 'cards' as Page,
+            label: 'Cartões',
+            icon: CreditCard,
+          },
+        ]
+      : []),
+
+    ...(user?.perfil === 'ADMIN'
+      ? [
+          {
+            id: 'cards' as Page,
+            label: 'Cartões',
+            icon: CreditCard,
+          },
         ]
       : []),
   ];

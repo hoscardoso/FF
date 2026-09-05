@@ -1,4 +1,4 @@
-export type CardId = 'angela' | 'marlei';
+export type CardId = string;
 
 export type UserRole =
   | 'MASTER'
@@ -85,6 +85,7 @@ export interface CardInfo {
   conta: string;
 }
 
+
 export const CARDS: Cards = {
   angela: {
     id: 'angela',
@@ -105,4 +106,5 @@ export type Page =
   | 'extrato-angela'
   | 'extrato-marlei'
   | 'relatorios'
-  | 'usuarios';
+  | 'usuarios'
+  | 'cards';

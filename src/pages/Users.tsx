@@ -6,6 +6,12 @@ export function Users() {
   const [loading, setLoading] = useState(true);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [passwordModal, setPasswordModal] = useState(false);
+
+const [usuarioSelecionado, setUsuarioSelecionado] =
+  useState<User | null>(null);
+
+const [novaSenha, setNovaSenha] = useState('');
 
   const [nome, setNome] = useState('');
   const [usuario, setUsuario] = useState('');
@@ -68,6 +74,31 @@ export function Users() {
       console.error(error);
     }
   }
+  async function alterarSenha() {
+  if (!usuarioSelecionado) return;
+
+  try {
+    await fetch(
+      `http://localhost:3001/api/users/${usuarioSelecionado.id}/password`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senha: novaSenha,
+        }),
+      }
+    );
+
+    setNovaSenha('');
+    setPasswordModal(false);
+
+    alert('Senha alterada com sucesso!');
+  } catch (error) {
+    console.error(error);
+  }
+}
 
   return (
     <div className="space-y-6">
@@ -156,9 +187,15 @@ export function Users() {
                         Editar
                       </button>
 
-                      <button className="btn-secondary">
-                        Senha
-                      </button>
+                      <button
+                      className="btn-secondary"
+                      onClick={() => {
+                        setUsuarioSelecionado(u);
+                        setPasswordModal(true);
+                        }}
+                        >
+                          Senha
+                          </button>
 
                       <button className="btn-danger">
                         Bloquear
@@ -259,6 +296,54 @@ export function Users() {
 
             </div>
           </div>
+        </div>
+      )}
+          {passwordModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+          <div className="bg-white rounded-xl p-6 w-full max-w-md">
+
+            <h2 className="text-xl font-bold mb-4">
+              Alterar Senha
+            </h2>
+
+            <p className="text-sm text-slate-500 mb-4">
+              {usuarioSelecionado?.nome}
+            </p>
+
+            <input
+              type="password"
+              className="input-base"
+              placeholder="Nova senha"
+              value={novaSenha}
+              onChange={(e) =>
+                setNovaSenha(e.target.value)
+              }
+            />
+
+            <div className="flex justify-end gap-2 mt-6">
+
+              <button
+                className="btn-secondary"
+                onClick={() => {
+                  setPasswordModal(false);
+                  setNovaSenha('');
+                }}
+              >
+                Cancelar
+              </button>
+
+              <button
+                className="btn-primary"
+                onClick={alterarSenha}
+              >
+                Salvar
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
       )}
     </div>

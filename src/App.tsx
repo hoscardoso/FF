@@ -11,6 +11,7 @@ import { CardControl } from '@/pages/CardControl';
 import { Statement } from '@/pages/Statement';
 import { Reports } from '@/pages/Reports';
 import { Users } from '@/pages/Users';
+import { Cards } from '@/pages/Cards';
 import { Login } from '@/pages/Login';
 
 import { AlertBanner, useAlerts } from '@/components/Alerts';
@@ -49,6 +50,9 @@ function AppContent() {
       case 'usuarios':
         return <Users />;
 
+      case 'cards':
+        return <Cards />;
+
       default:
         return <Dashboard />;
     }
@@ -63,6 +67,7 @@ function AppContent() {
       'extrato-marlei': 'Extrato Marlei',
       relatorios: 'Relatórios',
       usuarios: 'Usuários',
+      cards: 'Cartões',
     };
 
     return titles[page];

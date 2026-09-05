@@ -1,3 +1,4 @@
+import { useCards } from '@/context/CardsContext';
 import { useState, useMemo } from 'react';
 import {
   BarChart3,
@@ -31,6 +32,7 @@ type ReportTab = 'utilizacao' | 'financeiro' | 'prestacao';
 
 export function Reports() {
   const { history, purchases } = useApp();
+  const { cards } = useCards();
   const [tab, setTab] = useState<ReportTab>('utilizacao');
   const [periodStart, setPeriodStart] = useState('');
   const [periodEnd, setPeriodEnd] = useState('');
@@ -58,7 +60,7 @@ export function Reports() {
       byColaborador[name].retiradas++;
       if (h.dataDevolucao) byColaborador[name].devolucoes++;
     });
-    const byCard = Object.values(CARDS).map((card) => {
+    const byCard = cards.map((card) => {
       const cardHist = filtered.filter((h) => h.cardId === card.id);
       return {
         card: card.responsavel,
@@ -83,7 +85,7 @@ export function Reports() {
       const m = p.dataCompra.slice(0, 7);
       if (m) byMonth[m] = (byMonth[m] || 0) + p.valor;
     });
-    const byResponsavel = Object.values(CARDS).map((card) => {
+    const byResponsavel = cards.map((card) => {
       const total = filtered
         .filter((p) => p.cardId === card.id)
         .reduce((sum, p) => sum + p.valor, 0);
@@ -177,7 +179,10 @@ export function Reports() {
 
   const utilizacaoRows = utilizacaoData.filtered.map((h) => ({
     ...h,
-    cardName: CARDS[h.cardId].responsavel,
+    cardName:
+  cards.find(
+    (c) => String(c.id) === String(h.cardId)
+  )?.responsavel || 'Cartão',
   }));
 
   const financeiroCols: ExportColumn<Purchase & { cardName: string }>[] = [
@@ -192,7 +197,10 @@ export function Reports() {
 
   const financeiroRows = financeiroData.filtered.map((p) => ({
     ...p,
-    cardName: CARDS[p.cardId].responsavel,
+    cardName:
+  cards.find(
+    (c) => String(c.id) === String(p.cardId)
+  )?.responsavel || 'Cartão',
   }));
 
   return (
@@ -509,7 +517,11 @@ export function Reports() {
                         <tr key={p.id} className="border-b border-slate-100">
                           <td className="py-2 px-3 text-slate-700">{formatDate(p.dataCompra)}</td>
                           <td className="py-2 px-3 text-slate-700">{p.descricao}</td>
-                          <td className="py-2 px-3 text-slate-500">{CARDS[p.cardId].responsavel}</td>
+                          <td className="py-2 px-3 text-slate-500">{
+  cards.find(
+    (c) => String(c.id) === String(p.cardId)
+  )?.responsavel || 'Cartão'
+}</td>
                           <td className="py-2 px-3 text-slate-700">{p.usuario}</td>
                           <td className="py-2 px-3 text-right font-medium text-slate-800">
                             {formatCurrency(p.valor)}

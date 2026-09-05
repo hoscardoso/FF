@@ -5,13 +5,16 @@ import App from './App.tsx';
 import './index.css';
 
 import { AuthProvider } from './context/AuthContext';
+import { CardsProvider } from './context/CardsContext';
 
 createRoot(
   document.getElementById('root')!
 ).render(
   <StrictMode>
     <AuthProvider>
-      <App />
+      <CardsProvider>
+        <App />
+      </CardsProvider>
     </AuthProvider>
   </StrictMode>
 );

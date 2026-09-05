@@ -1,3 +1,4 @@
+import { useCards } from '@/context/CardsContext';
 import { useMemo } from 'react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import {
@@ -26,6 +27,7 @@ import {
 
 export function Dashboard() {
   const { history, purchases } = useApp();
+  const { cards } = useCards();
 
   const stats = useMemo(() => {
     const totalRetiradas = history.filter((h) => h.dataRetirada).length;
@@ -33,16 +35,16 @@ export function Dashboard() {
     const emUso = history.filter(
       (h) => h.dataRetirada && !h.dataDevolucao
     ).length;
-    const disponiveis = Object.keys(CARDS).length - emUso;
+    const disponiveis = cards.length - emUso;
     const pendentesComprovacao = purchases.filter(
       (p) => p.situacao === 'Pendente' || p.situacao === 'Sem comprovante'
     ).length;
     const valorTotal = totalUtilizado(purchases);
     const valorMes = totalUtilizadoMes(purchases);
 
-    const porResponsavel = Object.values(CARDS).map((card) => {
+    const porResponsavel = cards.map((card) => {
       const total = purchases
-        .filter((p) => p.cardId === card.id)
+        .filter((p) => String(p.cardId) === String(card.id))
         .reduce((sum, p) => sum + p.valor, 0);
       return { name: card.responsavel, total };
     });
