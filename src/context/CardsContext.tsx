@@ -35,7 +35,7 @@ export function CardsProvider({
   async function carregarCards() {
     try {
       const response = await fetch(
-        'http://localhost:3001/api/cards'
+        'http://10.19.20.170:3001/api/cards'
       );
 
       const data = await response.json();

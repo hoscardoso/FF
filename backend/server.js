@@ -29,7 +29,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.listen(3001, () => {
+app.listen(3001, '0.0.0.0', () => {
   console.log('API executando na porta 3001');
 });
 

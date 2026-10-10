@@ -26,7 +26,7 @@ const [novaSenha, setNovaSenha] = useState('');
   async function carregarUsuarios() {
     try {
       const response = await fetch(
-        'http://localhost:3001/api/users'
+        'http://10.19.20.170:3001/api/users'
       );
 
       const data = await response.json();
@@ -42,7 +42,7 @@ const [novaSenha, setNovaSenha] = useState('');
   async function criarUsuario() {
     try {
       const response = await fetch(
-        'http://localhost:3001/api/users',
+        'http://10.19.20.170:3001/api/users',
         {
           method: 'POST',
           headers: {
@@ -79,7 +79,7 @@ const [novaSenha, setNovaSenha] = useState('');
 
   try {
     await fetch(
-      `http://localhost:3001/api/users/${usuarioSelecionado.id}/password`,
+      `http://10.19.20.170:3001/api/users/${usuarioSelecionado.id}/password`,
       {
         method: 'PATCH',
         headers: {

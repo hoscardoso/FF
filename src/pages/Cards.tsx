@@ -25,7 +25,7 @@ export function Cards() {
 
   async function carregarCards() {
     const response = await fetch(
-      'http://localhost:3001/api/cards'
+      'http://10.19.20.170:3001/api/cards'
     );
 
     const data = await response.json();
@@ -35,7 +35,7 @@ export function Cards() {
 
   async function criarCard() {
     await fetch(
-      'http://localhost:3001/api/cards',
+      'http://10.19.20.170:3001/api/cards',
       {
         method: 'POST',
         headers: {
