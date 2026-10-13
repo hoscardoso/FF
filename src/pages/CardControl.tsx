@@ -39,7 +39,7 @@ const emptyForm = {
 };
 
 export function CardControl({ cardId }: CardControlProps) {
-  const { history, addHistory, updateHistory, deleteHistory } = useApp();
+const { history, addHistory, updateHistory, deleteHistory } = useApp();
   const card = CARDS[cardId];
   const { user } = useAuth();
 
@@ -53,7 +53,7 @@ const podeEditar =
   const [statusFilter, setStatusFilter] = useState('');
   const [periodStart, setPeriodStart] = useState('');
   const [periodEnd, setPeriodEnd] = useState('');
-
+ 
   const cardHistory = useMemo(
     () => history.filter((h) => h.cardId === cardId),
     [history, cardId]
@@ -92,16 +92,50 @@ const podeEditar =
     setModalOpen(true);
   };
 
-  const handleSave = () => {
-    if (!form.dataRetirada || !form.quemRetirou) return;
-    if (editingId) {
-      updateHistory(editingId, { ...form, cardId });
-    } else {
-      addHistory({ ...form, cardId });
-    }
-    setModalOpen(false);
-  };
+  const handleSave = async () => {
+  if (
+    !form.dataRetirada ||
+    !form.quemRetirou
+  ) {
+    return;
+  }
 
+  try {
+    await fetch(
+      'http://10.19.20.170:3001/api/card-usage',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type':
+            'application/json',
+        },
+        body: JSON.stringify({
+          card_id: cardId,
+          data_retirada:
+            form.dataRetirada,
+          hora_retirada:
+            form.horaRetirada,
+          quem_retirou:
+            form.quemRetirou,
+          finalidade:
+            form.finalidade,
+          observacao:
+            form.observacao,
+          data_devolucao:
+            form.dataDevolucao,
+          hora_devolucao:
+            form.horaDevolucao,
+        }),
+      }
+    );
+
+    setModalOpen(false);
+
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+};
   const handleDelete = (item: CardUsage) => {
     if (confirm('Excluir este registro?')) {
       deleteHistory(item.id);
