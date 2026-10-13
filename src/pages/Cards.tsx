@@ -34,30 +34,48 @@ export function Cards() {
   }
 
   async function criarCard() {
-    await fetch(
-      'http://10.19.20.170:3001/api/cards',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type':
-            'application/json',
-        },
-        body: JSON.stringify({
-          responsavel,
-          conta,
-        }),
-      }
-    );
+  await fetch(
+    'http://10.19.20.170:3001/api/cards',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        responsavel,
+        conta,
+      }),
+    }
+  );
 
-    setResponsavel('');
-    setConta('');
-    setModalOpen(false);
+  setResponsavel('');
+  setConta('');
+  setModalOpen(false);
 
-    carregarCards();
+  carregarCards();
+}
+
+async function excluirCard(id: number) {
+  const confirmar = window.confirm(
+    'Deseja realmente excluir este cartão?'
+  );
+
+  if (!confirmar) {
+    return;
   }
 
-  return (
-    <div className="space-y-6">
+  await fetch(
+    `http://10.19.20.170:3001/api/cards/${id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+
+  carregarCards();
+}
+
+return (
+  <div className="space-y-6">
 
       <div className="flex items-center justify-between">
         <div>
@@ -96,31 +114,44 @@ export function Cards() {
               <th className="text-left p-3">
                 Status
               </th>
+
+              <th className="text-center p-3">
+                Ações
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            {cards.map((card) => (
-              <tr
-                key={card.id}
-                className="border-b"
-              >
-                <td className="p-3">
-                  {card.responsavel}
-                </td>
+  {cards.map((card) => (
+    <tr
+      key={card.id}
+      className="border-b"
+    >
+      <td className="p-3">
+        {card.responsavel}
+      </td>
 
-                <td className="p-3">
-                  {card.conta}
-                </td>
+      <td className="p-3">
+        {card.conta}
+      </td>
 
-                <td className="p-3">
-                  {card.ativo
-                    ? 'Ativo'
-                    : 'Inativo'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+      <td className="p-3">
+        {card.ativo
+          ? 'Ativo'
+          : 'Inativo'}
+      </td>
+
+      <td className="p-3 text-center">
+       <button
+  onClick={() => excluirCard(card.id)}
+  className="text-red-600 hover:text-red-800 font-medium"
+>
+          Excluir
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
         </table>
 
       </div>

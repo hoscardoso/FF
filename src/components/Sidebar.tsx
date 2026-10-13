@@ -52,19 +52,19 @@ export function Sidebar({
       icon: CreditCard,
     },
 
-    {
-      id: 'extrato-angela',
-      label: `Extrato ${CARDS.angela.responsavel}`,
-      sublabel: `Conta ${CARDS.angela.conta}`,
-      icon: FileText,
-    },
+    //{
+      //id: 'extrato-angela',
+      //label: `Extrato ${CARDS.angela.responsavel}`,
+      //sublabel: `Conta ${CARDS.angela.conta}`,
+      //icon: FileText,
+    //},
 
-    {
-      id: 'extrato-marlei',
-      label: `Extrato ${CARDS.marlei.responsavel}`,
-      sublabel: `Conta ${CARDS.marlei.conta}`,
-      icon: FileText,
-    },
+    //{
+      //id: 'extrato-marlei',
+      //label: `Extrato ${CARDS.marlei.responsavel}`,
+      //sublabel: `Conta ${CARDS.marlei.conta}`,
+      //icon: FileText,
+    //},
 
     {
       id: 'relatorios',

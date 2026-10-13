@@ -4,6 +4,8 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const cardsRoutes = require('./routes/cards');
+const cardUsageRoutes =
+  require('./routes/cardUsage');
 
 const app = express();
 
@@ -21,6 +23,11 @@ console.log('usersRoutes carregada');
 console.log('Carregando cardsRoutes...');
 app.use('/api/cards', cardsRoutes);
 console.log('cardsRoutes carregada');
+
+console.log('Carregando cardUsageRoutes...');
+app.use('/api/card-usage', cardUsageRoutes);
+console.log('TESTE CARD_USAGE REGISTRADA');
+console.log('cardUsageRoutes carregada');
 
 app.get('/api/health', (req, res) => {
   res.json({

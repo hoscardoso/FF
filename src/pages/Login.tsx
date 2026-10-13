@@ -71,15 +71,14 @@ export function Login() {
           </div>
 
           <h1 className="text-7xl font-extrabold leading-none mb-6">
-            Incorpore
+            Gestão
             <br />
-            o futuro
+            de Cartões
           </h1>
 
           <p className="text-2xl text-white/80 max-w-xl mb-12">
-            Gerencie fundo fixo, extratos,
-            comprovantes e prestação de contas
-            com segurança total.
+            Controle de saída e devoluções.
+            
           </p>
 
           <div className="relative w-[420px] h-[280px] mt-8">

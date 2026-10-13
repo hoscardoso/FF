@@ -68,4 +68,27 @@ router.post('/', (req, res) => {
   );
 });
 
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.run(
+    `
+      DELETE FROM cards
+      WHERE id = ?
+    `,
+    [id],
+    function (err) {
+      if (err) {
+        return res.status(500).json({
+          sucesso: false,
+          mensagem: 'Erro ao excluir cartão',
+        });
+      }
+
+      res.json({
+        sucesso: true,
+      });
+    }
+  );
+});
 module.exports = router;
